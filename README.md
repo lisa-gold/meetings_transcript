@@ -10,6 +10,7 @@ It uses [OpenAI Whisper model](https://github.com/openai/whisper) for speech-to-
 ## Prerequisites
 
 - Python 3.11 or higher
+- ffmpeg `apt install ffmpeg`
 - Operating System: macOS/Linux
 - Sufficient disk space for model downloads and audio processing
 - Audio files should be in a supported format (WAV, MP3, etc.)
