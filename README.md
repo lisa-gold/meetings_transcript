@@ -29,6 +29,18 @@ $ cd meetings-transcriptor
 $ make setup
 ```
 
+3. Accept user condition
+   - [pyannote/segmentation-3.0](https://huggingface.co/pyannote/segmentation-3.0)
+   - [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1)
+4. Create token on hugging face
+   - [hf.co/settings/tokens](hf.co/settings/tokens)
+   - Set environmental variables (see [example](.env.example)):
+     ```
+     $ touch .env
+     $ echo "HG_TOKEN=<your_token>" > .env
+     ```
+5. 
+
 ## Usage
 
 Save your audio file in the directory input/

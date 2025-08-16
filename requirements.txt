@@ -1,1 +1,8 @@
+python-dotenv
 openai-whisper
+torch
+torchaudio
+pyannote.audio
+huggingface_hub
+pydub
+
