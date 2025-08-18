@@ -56,7 +56,7 @@ After script completion, you can find a txt file with meeting transcript in dire
 
 # Improvements
 1. Handle wrong audio file extensions
-2. Add speaker alignments, use pyannote.audio, send a segmented .wav to OpenAI Wisper
+2. Map speakers to predefined voices
 3. Send the resulting transcript to an AI Model to summarize it. Create JSON with tasks defined from the transcript
 4. Send tasks to email
 5. Make an endpoint that will receive the audio file and start the job and respond with the summery
