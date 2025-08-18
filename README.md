@@ -33,7 +33,7 @@ $ make setup
    - [pyannote/segmentation-3.0](https://huggingface.co/pyannote/segmentation-3.0)
    - [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1)
 4. Create token on hugging face
-   - [hf.co/settings/tokens](hf.co/settings/tokens)
+   - [hf.co/settings/tokens](https://huggingface.co/settings) Choose permissions: `Read access to contents of all public gated repos you can access`
    - Set environmental variables (see [example](.env.example)):
      ```
      $ touch .env
