@@ -15,6 +15,8 @@ from db_accessor import DBAccessor
 from llm_accessor import LlmAccessor
 from utils import convert_audio_file
 
+THRESHOLD = 0.6
+
 
 def transcribe_audio(file_path: str, model_name: str = Models.TINY):
     """
@@ -124,7 +126,7 @@ def define_speaker_by_timestamp(diarization: List[Tuple[Segment, Label]],
     return 'Unknown'
 
 
-def map_speaker_name(current_emb: list, threshold: float = 0.6) -> str | None:
+def map_speaker_name(current_emb: list, threshold: float = THRESHOLD) -> str | None:
     from sklearn.metrics.pairwise import cosine_similarity
 
     # Get all speakers and their vectors from the database

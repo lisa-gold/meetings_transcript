@@ -47,6 +47,7 @@ $ make setup
 2. Save these files in the directory voice_samples/< speaker_name >. 
    - Subfolder speaker_name references the speaker name that will be saved in the database. 
    - It has to be unique and without spaces and other special characters.
+   - Use speaker names consistently! Don't change them after the first run (subdirectory names and on command run) as they are fixed in the database.
 3. Go to the project root
 4. Activate virtual environment `source venv/bin/activate`
 5. Run `python -m commands.add_sample_record <speaker_name> <file_name.extension>`
