@@ -105,6 +105,11 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
         use_auth_token=os.getenv("HG_TOKEN")
     )
 
+    # Get all speakers and their vectors from the database
+    db_accessor = DBAccessor('speakers.db')
+    speaker_vectors = db_accessor.cursor.execute("SELECT name, embedding FROM speakers").fetchall()
+    print(f'Found {len(speaker_vectors)} speakers in the database')
+
     # print the result
     result = []
     for turn, _, speaker in diarization.itertracks(yield_label=True):
@@ -112,7 +117,7 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
         waveform, sample_rate = audio.crop(converted_file_path, turn)
         # Get embedding for the segment
         vector = embedding_model(waveform[None])
-        name = map_speaker_name(vector)
+        name = map_speaker_name(vector, speaker_vectors)
         result.append((turn, name or speaker))
     return result
 
@@ -126,18 +131,13 @@ def define_speaker_by_timestamp(diarization: List[Tuple[Segment, Label]],
     return 'Unknown'
 
 
-def map_speaker_name(current_emb: list, threshold: float = THRESHOLD) -> str | None:
+def map_speaker_name(current_emb: list, speaker_vectors: list, threshold: float = THRESHOLD) -> str | None:
     from sklearn.metrics.pairwise import cosine_similarity
 
-    # Get all speakers and their vectors from the database
-    db_accessor = DBAccessor('speakers.db')
-    speaker_vector = db_accessor.cursor.execute("SELECT name, embedding FROM speakers").fetchall()
-    print(speaker_vector)
-    print(f'Found {len(speaker_vector)} speakers in the database')
     # Find the closest reference
     best_name = None
     best_score = -1
-    for name, ref_emb_bytes in speaker_vector:
+    for name, ref_emb_bytes in speaker_vectors:
         ref_emb = pickle.loads(ref_emb_bytes)
         result = cosine_similarity(current_emb, ref_emb)
         score = result[0][0]
@@ -150,6 +150,6 @@ def map_speaker_name(current_emb: list, threshold: float = THRESHOLD) -> str | N
     if best_score >= threshold:
         speaker_name = best_name
     else:
-        print(f'  - No match found for speaker. Best match: {best_name} - {best_score}')
+        print(f'  - No match found for speaker. Best match: {best_name} - {round(best_score, 3)}')
         speaker_name = None
     return speaker_name
