@@ -98,7 +98,7 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
     # apply pretrained pipeline
     converted_file_path = convert_audio_file(file_path)
     diarization = pipeline(converted_file_path)
-    audio = Audio()
+    audio = Audio(mono=True)
     embedding_model = PretrainedSpeakerEmbedding(
         "pyannote/embedding",
         device=device,
