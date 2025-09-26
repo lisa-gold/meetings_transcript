@@ -115,6 +115,9 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
     for turn, _, speaker in diarization.itertracks(yield_label=True):
         # Crop segment audio
         waveform, sample_rate = audio.crop(converted_file_path, turn)
+        if waveform.shape[1] < sample_rate / 2:
+            continue  # skip segment, it is too short
+
         # Get embedding for the segment
         vector = embedding_model(waveform[None])
         name = map_speaker_name(vector, speaker_vectors)
