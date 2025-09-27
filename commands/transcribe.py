@@ -117,9 +117,14 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
         waveform, sample_rate = audio.crop(converted_file_path, turn)
         if waveform.shape[1] < sample_rate / 2:
             continue  # skip segment, it is too short
+        # Make sure it's mono and shaped (batch, num_samples)
+        if waveform.ndim > 1:  # it is stereo
+            waveform = waveform.mean(dim=0, keepdim=True)  # force mono
+
+        waveform = waveform.squeeze(0).unsqueeze(0)  # -> (1, num_samples)
 
         # Get embedding for the segment
-        vector = embedding_model(waveform[None])
+        vector = embedding_model(waveform)
         name = map_speaker_name(vector, speaker_vectors)
         result.append((turn, name or speaker))
     return result
