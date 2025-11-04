@@ -61,7 +61,7 @@ Run the main script with the required arguments:
 - choose the model name from the list: tiny, base, small, medium, large, turbo
 
 ```bash
-python main.py <file_name> <model>
+python main.py <file_name> --model <model> --lang <language(en, ru)>
 ```
 
 After script completion, you can find a txt file with meeting transcript in directory output/

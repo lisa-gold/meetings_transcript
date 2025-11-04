@@ -18,7 +18,7 @@ from utils import convert_audio_file
 THRESHOLD = 0.6
 
 
-def transcribe_audio(file_path: str, model_name: str = Models.TINY):
+def transcribe_audio(file_path: str, model_name: str = Models.TINY, language: str | None = None):
     """
     Транскрибирует аудиофайл с помощью Whisper.
     """
@@ -30,7 +30,12 @@ def transcribe_audio(file_path: str, model_name: str = Models.TINY):
     # Модели хранятся в ~/.cache/whisper
     model_transcript = whisper.load_model(model_name)
     print("Модель загружена. Начало транскрибации...")
-    result = model_transcript.transcribe(file_path, word_timestamps=True)
+    decode_options = {}
+    if language:
+        decode_options.update({"language": language})
+    result = model_transcript.transcribe(audio=file_path,
+                                         word_timestamps=True,
+                                         **decode_options)
     segments = result['segments']
     final_text = ''
     if diarization:
@@ -61,7 +66,7 @@ def transcribe_audio(file_path: str, model_name: str = Models.TINY):
     if tasks were given, write these tasks in bullet points for every speaker who has tasks. Use md formatting.
     <text>{final_text}</text>
     '''
-    llm_accessor.generate_response(summery_prompt)
+    summery = llm_accessor.generate_response(summery_prompt)
 
 
 def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
