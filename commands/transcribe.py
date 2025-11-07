@@ -1,6 +1,7 @@
 import os
 import pickle
 
+import torchaudio
 from dotenv import load_dotenv
 from typing import Tuple, List
 
@@ -102,6 +103,8 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
 
     # apply pretrained pipeline
     converted_file_path = convert_audio_file(file_path)
+    waveform, sample_rate = torchaudio.load(converted_file_path)
+    audio_duration = waveform.shape[1] / sample_rate  # seconds
     diarization = pipeline(converted_file_path)
     audio = Audio(mono=True)
     embedding_model = PretrainedSpeakerEmbedding(
@@ -119,7 +122,10 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
     result = []
     for turn, _, speaker in diarization.speaker_diarization.itertracks(yield_label=True):
         # Crop segment audio
-        waveform, sample_rate = audio.crop(converted_file_path, turn)
+        end_time = min(turn.end, audio_duration)
+        start_time = max(turn.start, 0.0)
+        safe_turn = Segment(start_time, end_time)
+        waveform, sample_rate = audio.crop(converted_file_path, safe_turn)
         if waveform.shape[1] < sample_rate / 2:
             continue  # skip segment, it is too short
         # Make sure it's mono and shaped (batch, num_samples)
