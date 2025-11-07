@@ -85,7 +85,7 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
         load_dotenv()
         pipeline = Pipeline.from_pretrained(
             "pyannote/speaker-diarization-3.1",
-            use_auth_token=os.getenv("HG_TOKEN")
+            token=os.getenv("HG_TOKEN")
         )
     except Exception as e:
         print(f"Error: {e}")
@@ -107,7 +107,7 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
     embedding_model = PretrainedSpeakerEmbedding(
         "pyannote/embedding",
         device=device,
-        use_auth_token=os.getenv("HG_TOKEN")
+        token=os.getenv("HG_TOKEN")
     )
 
     # Get all speakers and their vectors from the database
@@ -117,7 +117,7 @@ def define_speakers(file_path: str) -> List[Tuple[Segment, Label]] | None:
 
     # print the result
     result = []
-    for turn, _, speaker in diarization.itertracks(yield_label=True):
+    for turn, _, speaker in diarization.speaker_diarization.itertracks(yield_label=True):
         # Crop segment audio
         waveform, sample_rate = audio.crop(converted_file_path, turn)
         if waveform.shape[1] < sample_rate / 2:

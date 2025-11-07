@@ -1,8 +1,8 @@
 python-dotenv
-openai-whisper
-torch
-torchaudio
-pyannote.audio
+openai-whisper==20250625
+torch==2.9.0
+torchaudio==2.9.0
+pyannote.audio==4.0.1
 huggingface_hub
 pydub
-
+omegaconf==2.3.0
