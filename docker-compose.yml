@@ -9,10 +9,8 @@ services:
       - HG_TOKEN=${HG_TOKEN}
     volumes:
       - ./voice_samples:/app/voice_samples
-      # Mount the database file. Note: Docker will create a directory if this file doesn't exist on host.
-      # Ensure speakers.db exists (even if empty) before running.
       - ./speakers.db:/app/speakers.db
-      # Cache for HuggingFace models to avoid re-downloading
+      # Cache for HuggingFace
       - hf_cache:/root/.cache/huggingface
 
 volumes:
