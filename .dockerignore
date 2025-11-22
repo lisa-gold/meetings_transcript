@@ -1,0 +1,12 @@
+__pycache__
+venv/
+.env
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+README.md
+speakers.db.py
+voice_samples/
+input/
+

@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    container_name: meetings_transcript_app
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    environment:
+      - PORT=${PORT:-8000}
+      - HG_TOKEN=${HG_TOKEN}
+    volumes:
+      - ./voice_samples:/app/voice_samples
+      - ./speakers.db:/app/speakers.db
+      # Cache for HuggingFace
+      - hf_cache:/root/.cache/huggingface
+
+volumes:
+  hf_cache:
