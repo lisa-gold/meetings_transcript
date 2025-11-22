@@ -6,3 +6,7 @@ pyannote.audio==4.0.1
 huggingface_hub
 pydub
 omegaconf==2.3.0
+fastapi==0.121.3
+pydantic==2.12.4
+uvicorn==0.38.0
+python-multipart==0.0.20

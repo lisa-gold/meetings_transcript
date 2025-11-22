@@ -40,36 +40,36 @@ $ make setup
      ```
      $ touch .env
      $ echo "HG_TOKEN=<your_token>" > .env
+     $ echo "PORT=8000" > .env
      ```
+## Start the app
+
+```bash
+python main.py
+```
+It will start FastApi app on port defined in .env
 
 ## Preparations
 1. Make several short and clean (without background noise) audio files per speaker
-2. Save these files in the directory voice_samples/< speaker_name >. 
-   - Subfolder speaker_name references the speaker name that will be saved in the database. 
+2. Send POST request to /add_speaker with a voice sample and speaker name
+   - For a new speaker it creates a subfolder with speaker name. speaker_name references the speaker name that will be saved in the database. 
    - It has to be unique and without spaces and other special characters.
-   - Use speaker names consistently! Don't change them after the first run (subdirectory names and on command run) as they are fixed in the database.
-3. Go to the project root
-4. Activate virtual environment `source venv/bin/activate`
-5. Run `python -m commands.add_sample_record <speaker_name> <file_name.extension>`
-6. Run the last command for every speaker.
-7. Now your database stores embeddings for each speaker.
+   - IMPORTANT: Use speaker names consistently! Don't change them after the first run (subdirectory names and on command run) as they are fixed in the database.
+3. Now your database stores embeddings for each speaker.
+4. To check list of speakers you have stored send GET request to /speakers
 
 ## Usage
-Save your audio file in the directory input/
-Run the main script with the required arguments:
-- file_name (with extension)
-- choose the model name from the list: tiny, base, small, medium, large, turbo
+Send POST request to /transcribe
+- audio file
+- optionally choose the model name from the list: tiny, base, small, medium, large, turbo
+- optionally define language of the audio
+`{"file": file, "model": "tiny", "language": "ru"}`
 
-```bash
-python main.py <file_name> --model <model> --lang <language(en, ru)>
-```
+If you run this for the first time with a specified model, it will take some time to upload a model
+Models are stored in ~/.cache/whisper
 
-After script completion, you can find a txt file with meeting transcript in directory output/
 
 # Improvements
-1. Handle wrong audio file extensions
-2. ~~Map speakers to predefined voices~~
-3. Send the resulting transcript to an AI Model to summarize it. Create JSON with tasks defined from the transcript
-4. Send tasks to email
-5. Make an endpoint that will receive the audio file and start the job and respond with the summery
-6. Make improvements to text recognitions (remove background noise, etc.)
+1. Send the resulting transcript to an AI Model to summarize it. Create JSON with tasks defined from the transcript
+2. Send tasks to email
+3. Make improvements to text recognitions (remove background noise, etc.)

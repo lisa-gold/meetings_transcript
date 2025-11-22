@@ -8,3 +8,8 @@ class Models(str, Enum):
     MEDIUM = 'medium'
     LARGE = 'large'
     TURBO = 'turbo'
+
+
+ALLOWED_AUDIO_EXTENSIONS = {".wav", ".mp3", ".m4a", ".flac", ".ogg", ".opus"}
+ALLOWED_AUDIO_MIME_PREFIX = "audio/"
+DEFAULT_MODEL = 'Vllm'
