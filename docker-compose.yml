@@ -1,0 +1,19 @@
+services:
+  app:
+    build: .
+    container_name: meetings_transcript_app
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    environment:
+      - PORT=${PORT:-8000}
+      - HG_TOKEN=${HG_TOKEN}
+    volumes:
+      - ./voice_samples:/app/voice_samples
+      # Mount the database file. Note: Docker will create a directory if this file doesn't exist on host.
+      # Ensure speakers.db exists (even if empty) before running.
+      - ./speakers.db:/app/speakers.db
+      # Cache for HuggingFace models to avoid re-downloading
+      - hf_cache:/root/.cache/huggingface
+
+volumes:
+  hf_cache:
